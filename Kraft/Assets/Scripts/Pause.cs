@@ -1,0 +1,31 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Pause : MonoBehaviour
+{
+    private bool isPaused = false;
+
+    void Update()
+    {
+        Input.GetKeyDown(KeyCode.P);
+        {
+            //TogglePaused();
+        }
+    }
+
+    public void TogglePaused()
+    {
+        if (isPaused)
+        {
+            Time.timeScale = 1;
+            isPaused = false;
+        }
+        else
+        {
+            Time.timeScale = 0;
+            isPaused = true;
+        }
+    }
+}
+
