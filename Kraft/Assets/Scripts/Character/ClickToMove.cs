@@ -37,11 +37,8 @@ public class ClickToMove : MonoBehaviour
             {
                 if (Game.Instance.state == EGameState.FreeRoam)
                 {
-                    foreach (Character c in Game.Instance.charactersSelected)
-                    {
-                        c.MoveTo(hit.point);
-                        Debug.Log("move to :" + hit.point);
-                    }
+                    Game.Instance.activeCharacter.MoveTo(hit.point);
+                    Debug.Log("move to :" + hit.point);
                 }
             }
         }

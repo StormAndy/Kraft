@@ -13,7 +13,7 @@ public class Character : MonoBehaviour
 {
     //Local Stats for this instance of Character
 
-    private Mover mover;
+    public Mover mover;
 
     public int inititive;
     [SerializeField] private Transform moveTargetGraphic;

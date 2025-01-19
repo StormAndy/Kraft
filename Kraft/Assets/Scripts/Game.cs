@@ -15,6 +15,8 @@ public class Game : MonoBehaviour
     public static Game Instance { get; private set; }
     public CinemachineVirtualCamera mainCamera;
 
+    public Character activeCharacter;
+
     //global states
     public EGameState state;
 
@@ -38,6 +40,6 @@ public class Game : MonoBehaviour
     
     void Update()
     {
-        
+
     }
 }
