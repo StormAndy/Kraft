@@ -17,6 +17,9 @@ public class Game : MonoBehaviour
 
     public Character activeCharacter;
 
+    //Singletons
+    public DatabaseManager databaseManager;
+
     //global states
     public EGameState state;
 
@@ -25,7 +28,9 @@ public class Game : MonoBehaviour
     {
         #region Singleton Pattern
         if (Game.Instance == null)
+        {
             Instance = this;
+        }
         else
             Destroy(this.gameObject);
         #endregion
@@ -34,7 +39,11 @@ public class Game : MonoBehaviour
 
     void Start()
     {
-        
+        if(databaseManager == null)
+            databaseManager = GetComponent<DatabaseManager>();
+        databaseManager.LoadData();
+        databaseManager.LogData();
+        //databaseManager.SaveTestData();
     }
 
     

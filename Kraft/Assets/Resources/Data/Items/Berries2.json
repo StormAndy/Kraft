@@ -1,0 +1,22 @@
+{
+    "items": [
+        {
+            "name": "Strawberry",
+            "description": "A sweet red berry",
+            "isStackable": true,
+            "uniqueID": "berry_001"
+        },
+        {
+            "name": "Blueberry",
+            "description": "A small round blue berry",
+            "isStackable": true,
+            "uniqueID": "berry_002"
+        },
+        {
+            "name": "Raspberry",
+            "description": "A tangy red berry",
+            "isStackable": true,
+            "uniqueID": "berry_003"
+        }
+    ]
+}
