@@ -2,7 +2,7 @@ using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 using UnityEngine.Events;  // Make sure to include this for UnityEvents
 
-public class Button : MonoBehaviour, IInteractable
+public class ButtonActor : MonoBehaviour, IInteractable
 {
     public float interactionRange = 3f;  // Range at which the player can interact with the button
     public bool isActivated = false;     // Whether the button is activated or not
