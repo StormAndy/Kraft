@@ -20,6 +20,9 @@ public class Game : MonoBehaviour
     //Singletons
     public DatabaseManager databaseManager;
 
+    //Gameplay prefabs to instiate on the fly
+    public GameObject prefabPickup;
+
     //global states
     public EGameState state;
 

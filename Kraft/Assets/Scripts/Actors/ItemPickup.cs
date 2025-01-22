@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class ItemPickup : MonoBehaviour, IInteractable
 {
-    public string itemName;
+    public ItemData itemData { get; private set; }
     public bool isPickedUp = false;
     public float interactionRange = 3f;  // Default range for pickups
     public float bobbingHeight = 0.14f;  // Height of bobbing
@@ -14,6 +14,13 @@ public class ItemPickup : MonoBehaviour, IInteractable
     {
         originalPosition = transform.position;  // Save the original position of the object
     }
+    public void SetItemData(ItemData data)
+    {
+        this.itemData = data;
+        //Update Graphic of pickup here
+    }
+
+
 
     void Update()
     {
