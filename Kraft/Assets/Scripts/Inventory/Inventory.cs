@@ -7,7 +7,7 @@ using static UnityEngine.Rendering.DebugUI;
 /// <summary> Manages a collection of items in the inventory. </summary>
 public class Inventory : MonoBehaviour
 {
-    [SerializeField] public GameObject slotItemPrefab { get; private set; }
+    [SerializeField] public GameObject slotItemPrefab;
 
     public GameObject[] itemSlotsObjects; ///<summary> List of items in the inventory. </summary>
     [SerializeField]private Dictionary<int, InventorySlot> itemSlots = new Dictionary<int, InventorySlot>(); ///<summary> List of items in the inventory. </summary>
@@ -16,6 +16,7 @@ public class Inventory : MonoBehaviour
     private void Start()
     {
         PopulateItemSlotDictionary();
+        Invoke("AddTestItems", 3.0f);
     }
 
     /// <summary> Populate inventory slot lookup dictionary from slot prefabs assigned in itemSlotsObjects </summary>
@@ -33,20 +34,33 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    /// <summary> Adds an item to the inventory. </summary>
+    private void AddTestItems()
+    {
+        AddItem(new ItemData());
+        AddItem(new ItemData());
+        AddItem(new ItemData());
+        AddItem(new ItemData());
+    }
+
+    /// <summary> Adds an item to the first available slot inventory, creates ItemSlotItem for ItemData and assigns to empty Itemslot comp </summary>
     public void AddItem(ItemData item)
     {
         foreach (var slot in itemSlots)
         {
+            
             if (slot.Value.inventorySlotItem == null)
             {
+                Debug.Log(slot.Value.name + " slot value exists, instantiate new item prefab");
                 GameObject _newObj = Instantiate(slotItemPrefab, slot.Value.transform);
-                InventorySlotItem _slotItem = _newObj.GetComponent<InventorySlotItem>();
-                if (_slotItem != null)
-                    _slotItem.SetItemData(item);
+
+                slot.Value.inventorySlotItem = _newObj.GetComponent<InventorySlotItem>();
+                if (slot.Value.inventorySlotItem != null)
+                    slot.Value.inventorySlotItem.SetItemData(item);
+
 
                 return;
             }
+            Debug.Log("slot is not empty, check next slot");
         }
 
         Debug.Log("No slots available, add to Drop List?");

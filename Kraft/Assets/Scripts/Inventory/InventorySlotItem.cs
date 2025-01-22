@@ -10,7 +10,7 @@ public class InventorySlotItem : MonoBehaviour, IBeginDragHandler, IEndDragHandl
     public Image itemImage; ///<summary> UI Image component to display the item icon. </summary>
     public TMP_Text itemNameText; ///<summary> UI Text component to display the item name. </summary>
 
-    public ItemData itemData; ///<summary> Data associated with the item in this slot. </summary>
+    public ItemData itemData { get; private set; } ///<summary> Data associated with the item in this slot. </summary>
 
     [HideInInspector] public Transform parentAfterDrag;
 
