@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: TestTickLODStatus
   m_EditorClassIdentifier: 
   nearDistance: 30
-  nearTickInterval: 0.1
-  mediumDistance: 100
+  nearTickInterval: 0.05
+  mediumDistance: 60
   mediumTickInterval: 0.2
-  farDistance: 200
-  farTickInterval: 0.5
+  farDistance: 100
+  farTickInterval: 1
   veryFarDistance: 400
-  veryFarTickInterval: 1
+  veryFarTickInterval: 2.5

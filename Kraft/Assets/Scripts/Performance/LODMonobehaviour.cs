@@ -56,8 +56,8 @@ public class LODMonobehaviour : MonoBehaviour
         // Perform the update (e.g., movement, behavior, etc.)
         //Debug.Log("Ticking at interval: " + tickInterval);
 
-        lastTickTime = Time.time;
-        Debug.Log("Test LOD log, time since last tick is " + lastTickTime);
+        Debug.Log("Test LOD log, time since last tick is " + GetTimeSinceLastTick());
+        lastTickTime = Time.time;       
     }
 
     // Stop the repeating invocation when the object is disabled

@@ -8,11 +8,29 @@ using static UnityEngine.Rendering.DebugUI;
 /// <summary> Manages a collection of items in the inventory. </summary>
 public class Inventory : MonoBehaviour
 {
+    private int selectedSlot = -1;
+
     [SerializeField] public GameObject slotItemPrefab;
 
     public GameObject[] itemSlotsObjects; ///<summary> List of items in the inventory. </summary>
     [SerializeField]private Dictionary<int, InventorySlot> itemSlots = new Dictionary<int, InventorySlot>(); ///<summary> List of items in the inventory. </summary>
 
+
+    private void ChangeSelectedSlot(int newSlotID)
+    {
+        //Deselect selected slot
+        itemSlots.TryGetValue(selectedSlot, out InventorySlot _selectedSlot);
+        if (_selectedSlot)
+            _selectedSlot.Deselect();
+
+        //Select new slot
+        itemSlots.TryGetValue(newSlotID, out InventorySlot _slot);
+        if (_slot)
+            _slot.Select();
+        selectedSlot = newSlotID;
+
+
+    }
 
     private void Start()
     {
@@ -41,6 +59,7 @@ public class Inventory : MonoBehaviour
         AddItem(new ItemData());
         AddItem(new ItemData());
         AddItem(new ItemData());
+        ChangeSelectedSlot(24);
     }
 
     #region Has Inventory Space?

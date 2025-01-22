@@ -40,6 +40,7 @@ public class InventorySlotItem : MonoBehaviour, IBeginDragHandler, IEndDragHandl
         itemImage.raycastTarget = false;
         parentAfterDrag = transform.parent;
         transform.SetParent(transform.root);
+        transform.SetAsLastSibling();
     }
 
     public void OnEndDrag(PointerEventData eventData)
