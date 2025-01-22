@@ -4,19 +4,25 @@
             "name": "Strawberry",
             "description": "A sweet red berry",
             "isStackable": true,
-            "uniqueID": "berry_001"
+            "uniqueID": "berry_001",
+            "tags": ["fruit", "berry", "red"],
+            "graphicPath": "Assets/Graphics/Items/placeholder.png"
         },
         {
             "name": "Blueberry",
             "description": "A small round blue berry",
             "isStackable": true,
-            "uniqueID": "berry_002"
+            "uniqueID": "berry_002",
+            "tags": ["fruit", "berry", "blue"],
+            "graphicPath": "Assets/Graphics/Items/placeholder.png"
         },
         {
             "name": "Raspberry",
             "description": "A tangy red berry",
             "isStackable": true,
-            "uniqueID": "berry_003"
+            "uniqueID": "berry_003",
+            "tags": ["fruit", "berry", "red"],
+            "graphicPath": "Assets/Graphics/Items/placeholder.png"
         }
     ]
 }
