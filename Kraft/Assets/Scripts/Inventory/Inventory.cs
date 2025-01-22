@@ -59,7 +59,7 @@ public class Inventory : MonoBehaviour
         AddItem(new ItemData());
         AddItem(new ItemData());
         AddItem(new ItemData());
-        ChangeSelectedSlot(24);
+        ChangeSelectedSlot(1);
     }
 
     #region Has Inventory Space?

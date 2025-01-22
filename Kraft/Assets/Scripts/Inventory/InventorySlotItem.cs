@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using TMPro;
+using static UnityEditor.Progress;
 
 /// <summary> Manages the display of an individual inventory slot. </summary>
 public class InventorySlotItem : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
@@ -39,6 +40,12 @@ public class InventorySlotItem : MonoBehaviour, IBeginDragHandler, IEndDragHandl
     {
         itemImage.raycastTarget = false;
         parentAfterDrag = transform.parent;
+
+        // Empty old slot
+        InventorySlot _parentSlot = this.GetComponentInParent<InventorySlot>();
+        if (_parentSlot != null)
+            _parentSlot.inventorySlotItem = null;
+
         transform.SetParent(transform.root);
         transform.SetAsLastSibling();
     }
@@ -47,6 +54,11 @@ public class InventorySlotItem : MonoBehaviour, IBeginDragHandler, IEndDragHandl
     {
         itemImage.raycastTarget = true;
         transform.SetParent(parentAfterDrag);
+
+        InventorySlot _slot = parentAfterDrag.GetComponent<InventorySlot>();
+        if(_slot != null)
+            _slot.Assignitem(this);
+        
     }
 
     public void OnDrag(PointerEventData eventData)

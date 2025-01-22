@@ -34,21 +34,17 @@ public class InventorySlot : MonoBehaviour, IDropHandler
     {
         if (transform.childCount == 0)
         {
-
             InventorySlotItem _item = eventData.pointerDrag.GetComponent<InventorySlotItem>();
-            if (_item != null)
-            {
-                // Empty old slot
-                InventorySlot _parentSlot = _item.GetComponentInParent<InventorySlot>();
-                if (_parentSlot != null)
-                    _parentSlot.inventorySlotItem = null;
-
-               //Asssign slot item instance to this slot data
-                _item.parentAfterDrag = transform;
-                inventorySlotItem = _item;
-            }
-            
+            if (_item != null)            
+                _item.parentAfterDrag = transform;          
         }
+    }
+
+    public void Assignitem(InventorySlotItem newItem)
+    {
+        inventorySlotItem = null;
+        if (newItem != null) 
+            inventorySlotItem = newItem;
     }
 
 
