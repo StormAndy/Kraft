@@ -4,11 +4,7 @@ using System.IO;
 using System.Collections.Generic;
 using System;
 
-[Serializable]
-public class ItemCollection
-{
-    public List<ItemData> items = new List<ItemData>();
-}
+
 
 public class ItemJSONEditor : EditorWindow
 {

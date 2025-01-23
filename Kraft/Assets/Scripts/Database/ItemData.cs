@@ -27,3 +27,9 @@ public enum ItemType
     Knife,
     Sword
 }
+
+[System.Serializable]
+public class ItemCollection
+{
+    public List<ItemData> items = new List<ItemData>();
+}
