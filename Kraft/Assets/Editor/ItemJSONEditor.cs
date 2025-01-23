@@ -89,6 +89,7 @@ public class ItemJSONEditor : EditorWindow
                 item.name = EditorGUILayout.TextField("Name", item.name);
                 item.description = EditorGUILayout.TextField("Description", item.description);
                 item.isStackable = EditorGUILayout.Toggle("Is Stackable", item.isStackable);
+                item.maxStackSize = EditorGUILayout.IntField("Max Stack Size", item.maxStackSize);
                 item.uniqueID = EditorGUILayout.TextField("Unique ID", item.uniqueID);
 
                 // Tags
@@ -107,8 +108,13 @@ public class ItemJSONEditor : EditorWindow
                 }
                 if (GUILayout.Button("Add Tag")) item.tags.Add("");
 
-                // Image Sprite Path
-                item.graphicPath = EditorGUILayout.TextField("Graphic Path", item.graphicPath);
+                // GraphicIcon
+                EditorGUILayout.LabelField("Graphic Icon (2D)", EditorStyles.boldLabel);
+                item.graphicIcon = (Sprite)EditorGUILayout.ObjectField("Icon", item.graphicIcon, typeof(Sprite), false);
+
+                // GraphicPrefab
+                EditorGUILayout.LabelField("Graphic Prefab (3D)", EditorStyles.boldLabel);
+                item.graphicPrefab = (GameObject)EditorGUILayout.ObjectField("Prefab", item.graphicPrefab, typeof(GameObject), false);
 
                 if (GUILayout.Button("Remove Item", GUILayout.Height(20)))
                 {
@@ -128,9 +134,7 @@ public class ItemJSONEditor : EditorWindow
             EditorGUILayout.EndScrollView();
         }
         else
-        {
             EditorGUILayout.LabelField("Select a JSON file to edit.");
-        }
 
         EditorGUILayout.EndVertical();
     }

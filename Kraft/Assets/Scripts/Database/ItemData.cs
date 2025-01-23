@@ -4,14 +4,26 @@ using UnityEngine;
 [System.Serializable]
 public class ItemData
 {
-
     public string name;
     public string description;
     public bool isStackable;
+    public int maxStackSize;
     public string uniqueID;
+    public List<string> tags = new List<string>(); //Search/Filter Tags
 
-    // Placeholder fields for tags and graphics
-    public List<string> tags = new List<string>();
-    public string graphicPath;
+    public Sprite graphicIcon;        // For UI (2D)
+    public GameObject graphicPrefab;  // For world pickup (3D)
 
+    public List<ItemType> itemType = new List<ItemType>(); 
+}
+
+public enum ItemType
+{
+    Ingredient,
+    Weapon,
+    Tool,
+    Axe,
+    Pickaxe,
+    Knife,
+    Sword
 }
