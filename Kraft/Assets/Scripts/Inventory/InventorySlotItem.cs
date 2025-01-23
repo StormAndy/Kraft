@@ -12,6 +12,7 @@ public class InventorySlotItem : MonoBehaviour, IBeginDragHandler, IEndDragHandl
     public TMP_Text itemNameText; ///<summary> UI Text component to display the item name. </summary>
 
     public ItemData itemData { get; private set; } ///<summary> Data associated with the item in this slot. </summary>
+    public int stackSize;
 
     [HideInInspector] public Transform parentAfterDrag;
 

@@ -62,7 +62,7 @@ public class Inventory : MonoBehaviour
         ChangeSelectedSlot(1);
     }
 
-    #region Has Inventory Space?
+    #region Has... Inventory Queries
 
     /// <summary> Return true if atleast one free slot available </summary>
     public bool HasInventorySpace()
@@ -87,6 +87,77 @@ public class Inventory : MonoBehaviour
         else
             return false;
     }
+
+    /// <summary> Return trues if it has item with same uniqueID</summary>
+    public bool HasItem(ItemData item)
+    {
+        foreach (var slot in itemSlots)
+        {
+            if (slot.Value.inventorySlotItem.itemData.uniqueID == item.uniqueID)
+                return true;
+        }
+        return false;
+    }
+
+    /// <summary> Return trues if space for 1 stackable item </summary>
+    public bool HasSpaceForStackable(ItemData item)
+    {
+        if (item.isStackable != true)
+        {
+            Debug.Log(item.name + " item is not stackable");
+            return false;
+        }
+
+        // Search for stack with stack size lower than max size
+        foreach (var slot in itemSlots)
+        {
+            if (slot.Value.inventorySlotItem.itemData.uniqueID == item.uniqueID)
+                if (slot.Value.inventorySlotItem.stackSize < slot.Value.inventorySlotItem.itemData.maxStackSize)
+                    return true;               
+        }
+
+        //If no stacks with room check for empty slot to create new stack if possible
+        return HasInventorySpace();
+    }
+
+
+
+    /// <summary> Return trues if space for 1 stackable item </summary>
+    public bool HasSpaceForStackables(ItemData item, int quantity)
+    {
+        if (item.isStackable == false)
+        {
+            Debug.Log(item.name + " item is not stackable");
+            return false;
+        }
+
+        int _stackSpaceAvailable = 0;
+        // Search for stack with stack size lower than max size and tally remaining space in all stacks
+        foreach (var slot in itemSlots)
+        {
+            if (slot.Value.inventorySlotItem.itemData.uniqueID == item.uniqueID)
+                if (slot.Value.inventorySlotItem.stackSize < slot.Value.inventorySlotItem.itemData.maxStackSize)
+                    _stackSpaceAvailable += slot.Value.inventorySlotItem.itemData.maxStackSize - slot.Value.inventorySlotItem.stackSize;
+        }
+
+        //if enough space in stacks return out true, else check for more stack creation space
+        if(_stackSpaceAvailable >= quantity)
+            return true;
+        else
+        {
+            int _spillover = quantity - _stackSpaceAvailable;
+            //Can create 1 new stack if smaller than 1 stack in size
+            if (_spillover >= item.maxStackSize)
+                return HasInventorySpace();
+            else
+            {
+                //Work out how many stack slots needed, then check for multiple slot space
+                int _numberOfStacksNeeded = Mathf.CeilToInt((float)_spillover / (float)item.maxStackSize);
+                return HasInventorySpace(_numberOfStacksNeeded);
+            }
+        }
+    }
+
     #endregion
 
     /// <summary> Adds an item to the first available slot inventory, creates ItemSlotItem for ItemData and assigns to empty Itemslot comp </summary>
