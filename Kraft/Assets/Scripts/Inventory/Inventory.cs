@@ -206,22 +206,44 @@ public class Inventory : MonoBehaviour
                 if (_numberOfStacksNeeded == 1)
                 {
                     //only create 1 stack with items remaining
+                    foreach (var slot in itemSlots)
+                    {
+                        if (slot.Value.inventorySlotItem == null)
+                        {
+                            GameObject _newObj = Instantiate(slotItemPrefab, slot.Value.transform);
+                            slot.Value.inventorySlotItem = _newObj.GetComponent<InventorySlotItem>();
+                            slot.Value.inventorySlotItem.SetItemData(item);
+                            slot.Value.inventorySlotItem.stackSize = _itemsRemaining;
+                            _itemsRemaining = 0;
+                            break;
+                        }
+                    }
                 }
                 else
                 {
-                    //Last stack size worked out from removing all other max stacks from items remaining
-                    int _lastStackSize = _itemsRemaining - item.maxStackSize * (_numberOfStacksNeeded - 1);
-                    for (int i = 1; i < _numberOfStacksNeeded; i++)
+                    // Handle multiple stacks
+                    for (int i = 0; i < _numberOfStacksNeeded; i++)
                     {
-                        //For each stack create with max and if last stack create with remainder
-                        if(i >= _numberOfStacksNeeded)
+                        //if not last stack use maxStackSize, else last stack and use remainder
+                        int stackToAdd = (i == _numberOfStacksNeeded - 1) ? _itemsRemaining : item.maxStackSize;
+
+                        foreach (var slot in itemSlots)
                         {
-                            //use remainder
+                            if (slot.Value.inventorySlotItem == null)
+                            {
+                                GameObject _newObj = Instantiate(slotItemPrefab, slot.Value.transform);
+                                slot.Value.inventorySlotItem = _newObj.GetComponent<InventorySlotItem>();
+                                slot.Value.inventorySlotItem.SetItemData(item);
+                                slot.Value.inventorySlotItem.stackSize = stackToAdd;
+
+                                _itemsRemaining -= stackToAdd;
+                                break;
+                            }
                         }
-                        else
-                        {
-                            //use max stack size
-                        }
+
+                        // If inventory is full before all stacks are placed, handle overflow
+                        if (_itemsRemaining > 0 && i == _numberOfStacksNeeded - 1)
+                            Overflow(item, _itemsRemaining);
                     }
                 }
             }
