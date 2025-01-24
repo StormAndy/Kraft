@@ -16,6 +16,12 @@ public class InventorySlotItem : MonoBehaviour, IBeginDragHandler, IEndDragHandl
 
     [HideInInspector] public Transform parentAfterDrag;
 
+    public void AddToStack(int amount)
+    {
+        stackSize += amount;
+        UpdateSlotUI();
+    }
+
 
     /// <summary> Initializes the slot with the given item data. </summary>
     public void Initialize(ItemData item)

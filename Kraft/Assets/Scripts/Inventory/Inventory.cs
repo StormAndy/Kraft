@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
@@ -160,32 +161,98 @@ public class Inventory : MonoBehaviour
 
     #endregion
 
-    /// <summary> Adds an item to the first available slot inventory, creates ItemSlotItem for ItemData and assigns to empty Itemslot comp </summary>
-    public void AddItem(ItemData item)
+    /// <summary> Adds stackables to existing stacks first. Then to the first available slot inventory, creates ItemSlotItem for ItemData and assigns to empty Itemslot comp. Overflow method is then called to handle placing items to game world if inventory full  </summary>
+    public void AddItem(ItemData item, int amount = 1)
     {
-        foreach (var slot in itemSlots)
+        //Autoplace in stacks first
+        if (item.isStackable == true)
         {
-            
-            if (slot.Value.inventorySlotItem == null)
+            //Place in existing stacks
+            int _itemsRemaining = amount;
+            // Search for stack with stack size lower than max size and tally remaining space in all stacks
+            foreach (var slot in itemSlots)
             {
-                Debug.Log(slot.Value.name + " slot value exists, instantiate new item prefab");
-                GameObject _newObj = Instantiate(slotItemPrefab, slot.Value.transform);
+                if (slot.Value.inventorySlotItem.itemData.uniqueID == item.uniqueID)
+                    if (slot.Value.inventorySlotItem.stackSize < slot.Value.inventorySlotItem.itemData.maxStackSize)
+                    {
+                        int stackSpace = slot.Value.inventorySlotItem.itemData.maxStackSize - slot.Value.inventorySlotItem.stackSize;
+                        int stackIncrease = stackSpace;
+                        
+                        //if less space to fill than amount to place fill to max, else use remainder
+                        if(amount >= stackSpace)
+                            amount -= stackSpace;
+                        else
+                            stackIncrease = amount;
 
-                slot.Value.inventorySlotItem = _newObj.GetComponent<InventorySlotItem>();
-                if (slot.Value.inventorySlotItem != null)
-                    slot.Value.inventorySlotItem.SetItemData(item);
+                        //Add the stack amount to the slot item component
+                        InventorySlotItem _slotitem = slot.Value.GetComponent<InventorySlotItem>();
+                        if (_slotitem != null)
+                            _slotitem.AddToStack(stackIncrease);
+                        else
+                            Debug.LogError("failed to access InventorySlotItem Component when AddItem stackable item to slot " + slot.Key);
 
-
-                return;
+                    }
+                //Break out if no more items to place
+                if (_itemsRemaining <= 0)
+                    break;
             }
-            Debug.Log("slot is not empty, check next slot");
-        }
 
-        Debug.Log("No slots available, add to Drop List?");
-        Overflow(item);
+            //Form new stacks for items remaining
+            if (_itemsRemaining > 0)
+            {
+                //Work out how many stack slots needed, then check for multiple slot space
+                int _numberOfStacksNeeded = Mathf.CeilToInt((float)_itemsRemaining / (float)item.maxStackSize);
+
+                if (_numberOfStacksNeeded == 1)
+                {
+                    //only create 1 stack with items remaining
+                }
+                else
+                {
+                    //Last stack size worked out from removing all other max stacks from items remaining
+                    int _lastStackSize = _itemsRemaining - item.maxStackSize * (_numberOfStacksNeeded - 1);
+                    for (int i = 1; i < _numberOfStacksNeeded; i++)
+                    {
+                        //For each stack create with max and if last stack create with remainder
+                        if(i >= _numberOfStacksNeeded)
+                        {
+                            //use remainder
+                        }
+                        else
+                        {
+                            //use max stack size
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            //Find next empty slot to autoplace non stackables to
+            foreach (var slot in itemSlots)
+            {
+
+                if (slot.Value.inventorySlotItem == null)
+                {
+                    Debug.Log(slot.Value.name + " slot value exists, instantiate new item prefab");
+                    GameObject _newObj = Instantiate(slotItemPrefab, slot.Value.transform);
+
+                    slot.Value.inventorySlotItem = _newObj.GetComponent<InventorySlotItem>();
+                    if (slot.Value.inventorySlotItem != null)
+                        slot.Value.inventorySlotItem.SetItemData(item);
+
+
+                    return;
+                }
+                Debug.Log("slot is not empty, check next slot");
+            }
+            Debug.Log("No slots available, add to Drop List?");
+            Overflow(item);
+        }
     }
 
-  
+
+
 
 
     /// <summary> Removes an item from the inventory. </summary>
@@ -213,7 +280,7 @@ public class Inventory : MonoBehaviour
 
 
     /// <summary> Handles item overflow by dropping item to ground at active character position </summary>
-    public void Overflow(ItemData item)
+    public void Overflow(ItemData item, int amount = 1)
     {
         //Instantiate pickup
         GameObject _dropitemObject = GameObject.Instantiate(Game.Instance.prefabPickup);
