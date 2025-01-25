@@ -17,6 +17,7 @@ public class ItemData
     public List<ItemType> itemType = new List<ItemType>(); 
 }
 
+[System.Serializable]
 public enum ItemType
 {
     Ingredient,

@@ -26,6 +26,13 @@ public class Door : MonoBehaviour, IInteractable
     {
         if (animator == null)
             animator = this.GetComponent<Animator>();
+
+        //Warning logs for missing asset references
+        if (useStaticGraphics && (!staticGraphicClosed || !staticGraphicOpen))
+            Debug.LogWarning($"Static graphics not assigned for {name}");
+        if (!useStaticGraphics && !animator)
+            Debug.LogWarning($"Animator component missing on {name}");
+
     }
 
     public void Interact()
@@ -36,6 +43,7 @@ public class Door : MonoBehaviour, IInteractable
             ToggleState();
 
     }
+
 
     private void ToggleState()
     {

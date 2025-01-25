@@ -1,0 +1,18 @@
+{
+    "uniqueID": "recipe_wooden_sword",
+    "recipeName": "Wooden Sword",
+    "outputItemID": "wooden_sword",
+    "outputQuantity": 1,
+    "ingredients": [
+        {
+            "itemID": "wood",
+            "quantity": 5
+        },
+        {
+            "itemID": "iron_nail",
+            "quantity": 2
+        }
+    ],
+    "requiredTags": ["Workbench"],
+    "icon": null
+}
