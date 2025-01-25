@@ -29,8 +29,6 @@ public class Inventory : MonoBehaviour
         if (_slot)
             _slot.Select();
         selectedSlot = newSlotID;
-
-
     }
 
     private void Start()
@@ -56,10 +54,7 @@ public class Inventory : MonoBehaviour
     
     private void AddTestItems()
     {
-        AddItem(new ItemData());
-        AddItem(new ItemData());
-        AddItem(new ItemData());
-        AddItem(new ItemData());
+        AddItem(new ItemData()); AddItem(new ItemData()); AddItem(new ItemData()); AddItem(new ItemData());
         ChangeSelectedSlot(1);
     }
 
@@ -159,7 +154,25 @@ public class Inventory : MonoBehaviour
         }
     }
 
+    /// <summary> Checks if the inventory contains the required ingredients for a recipe. </summary>
+    public bool HasRequiredIngredients(RecipeData recipe)
+    {
+        foreach (var ingredient in recipe.ingredients)
+        {
+            int count = 0;
+            foreach (var slot in itemSlots)
+                if (slot.Value.inventorySlotItem != null && slot.Value.inventorySlotItem.itemData.uniqueID == ingredient.itemID)
+                    count += slot.Value.inventorySlotItem.stackSize;
+
+            if (count < ingredient.quantity)
+                return false; // Not enough of this ingredient
+        }
+        return true; // All ingredients are available
+    }
+
     #endregion
+
+    #region Add Items...
 
     /// <summary> Adds stackables to existing stacks first. Then to the first available slot inventory, creates ItemSlotItem for ItemData and assigns to empty Itemslot comp. Overflow method is then called to handle placing items to game world if inventory full  </summary>
     public void AddItem(ItemData item, int amount = 1)
@@ -275,7 +288,9 @@ public class Inventory : MonoBehaviour
 
 
 
+    #endregion
 
+    #region Remove items...
 
     /// <summary> Removes an item from the inventory. </summary>
     public void RemoveItem(ItemData item)
@@ -293,12 +308,42 @@ public class Inventory : MonoBehaviour
         }
     }
 
-
     /// <summary> Removes the items from the item slot specified </summary>
     public void RemoveItemAtSlot(InventorySlot slot)
     {
         Debug.Log("TO DO: implement destroying an item at a slot");
     }
+
+    /// <summary> Removes the required ingredients for a recipe from the inventory. </summary>
+    public void RemoveIngredients(RecipeData recipe)
+    {
+        foreach (var ingredient in recipe.ingredients)
+        {
+            int quantityToRemove = ingredient.quantity;
+
+            foreach (var slot in itemSlots)
+            {
+                if (slot.Value.inventorySlotItem != null && slot.Value.inventorySlotItem.itemData.uniqueID == ingredient.itemID)
+                {
+                    if (slot.Value.inventorySlotItem.stackSize >= quantityToRemove)
+                    {
+                        slot.Value.inventorySlotItem.stackSize -= quantityToRemove;
+                        if (slot.Value.inventorySlotItem.stackSize == 0)
+                            Destroy(slot.Value.inventorySlotItem.gameObject); // Clear slot
+                        break;
+                    }
+                    else
+                    {
+                        quantityToRemove -= slot.Value.inventorySlotItem.stackSize;
+                        Destroy(slot.Value.inventorySlotItem.gameObject); // Clear slot
+                    }
+                }
+            }
+        }
+    }
+
+#endregion
+
 
 
     /// <summary> Handles item overflow by dropping item to ground at active character position </summary>
