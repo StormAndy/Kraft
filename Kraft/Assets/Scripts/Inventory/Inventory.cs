@@ -31,6 +31,36 @@ public class Inventory : MonoBehaviour
         selectedSlot = newSlotID;
     }
 
+    /// <summary> Attempts to craft an item using a recipe, returns false if missing recipe ingredients or fails to retrieve item from database </summary>
+    public bool TryCraft(RecipeData recipe)
+    {
+        if (!HasRequiredIngredients(recipe))
+        { 
+            Debug.Log("Not enough ingredients to craft " + recipe.recipeName);
+            return false;
+        }
+
+        RemoveIngredients(recipe);
+
+        // Retrieve the ItemData from the database
+        ItemData craftedItem = Game.Instance.databaseManager.GetItemData(recipe.outputItemID);
+
+        if (craftedItem == null)
+        {
+            Debug.LogError($"ItemData not found for ID: {recipe.outputItemID}. Crafting failed.");
+            return false;
+        }
+
+        // Add the crafted item to the inventory
+        AddItem(craftedItem, recipe.outputQuantity);
+
+        Debug.Log($"Successfully crafted {craftedItem.name} (x{recipe.outputQuantity})");
+        return true;
+    }
+
+
+    #region Setup...
+
     private void Start()
     {
         PopulateItemSlotDictionary();
@@ -57,6 +87,8 @@ public class Inventory : MonoBehaviour
         AddItem(new ItemData()); AddItem(new ItemData()); AddItem(new ItemData()); AddItem(new ItemData());
         ChangeSelectedSlot(1);
     }
+
+    #endregion
 
     #region Has... Inventory Queries
 
