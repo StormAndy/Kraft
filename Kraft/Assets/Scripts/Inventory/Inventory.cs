@@ -7,7 +7,7 @@ using static UnityEditor.Progress;
 using static UnityEngine.Rendering.DebugUI;
 
 /// <summary> Manages a collection of items in the inventory. </summary>
-public class Inventory : MonoBehaviour
+public class Inventory : MonoBehaviour, IContainer
 {
     private int selectedSlot = -1;
 
@@ -91,6 +91,17 @@ public class Inventory : MonoBehaviour
     #endregion
 
     #region Has... Inventory Queries
+
+    /// <summary> (IContainer interface) Return true if space for stackables or free slots available for non stackables </summary>
+    public bool HasInventorySpace(ItemData item, int quantity)
+    {
+        if(item == null) return false;
+
+        if(item.isStackable == true)
+            return HasSpaceForStackables(item, quantity); //Check for stackable space
+        else
+            return HasInventorySpace(quantity);
+    }
 
     /// <summary> Return true if atleast one free slot available </summary>
     public bool HasInventorySpace()
@@ -399,7 +410,5 @@ public class Inventory : MonoBehaviour
         return null;
     }
 
-
-    
 }
 

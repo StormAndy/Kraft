@@ -34,3 +34,17 @@ public class ItemCollection
 {
     public List<ItemData> items = new List<ItemData>();
 }
+
+/// <summary> Represents a stack of items in a container class without a gameobject/slot item. Used for managing stacked items in simple slot-based and list-based containers. </summary> 
+[System.Serializable]
+public class ItemStack
+{
+    public ItemData itemData;  // The item data associated with the stack
+    public int quantity;       // The current quantity of the item in the stack
+
+    public ItemStack(ItemData item, int quantity)
+    {
+        this.itemData = item;
+        this.quantity = quantity;
+    }
+}

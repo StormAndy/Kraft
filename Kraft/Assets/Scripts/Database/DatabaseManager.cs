@@ -73,35 +73,6 @@ public class DatabaseManager : MonoBehaviour
         return recipe;
     }
 
-    /// <summary> Update an item in the database. </summary>
-    public void UpdateItemData(ItemData item)
-    {
-        itemDataDictionary[item.uniqueID] = item;
-    }
-
-    /// <summary> Update a recipe in the database. </summary>
-    public void UpdateRecipeData(RecipeData recipe)
-    {
-        recipeDataDictionary[recipe.uniqueID] = recipe;
-    }
-
-    /// <summary> Save all items in the database to a JSON file. </summary>
-    public void SaveItems(string path)
-    {
-        ItemCollection items = new ItemCollection { items = itemDataDictionary.Values.ToList() };
-        string json = JsonUtility.ToJson(items, true);
-        File.WriteAllText(path, json);
-    }
-
-    /// <summary> Save all recipes in the database to a JSON file. </summary>
-    public void SaveRecipes(string path)
-    {
-        List<RecipeData> recipes = recipeDataDictionary.Values.ToList();
-        string json = JsonUtility.ToJson(new { recipes = recipes }, true);
-        File.WriteAllText(path, json);
-    }
-
-
 }
 
 
