@@ -54,6 +54,7 @@ public class InventorySlotItem : MonoBehaviour, IBeginDragHandler, IEndDragHandl
             _parentSlot.inventorySlotItem = null;
 
         transform.SetParent(transform.root);
+        transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
         transform.SetAsLastSibling();
     }
 
@@ -61,6 +62,7 @@ public class InventorySlotItem : MonoBehaviour, IBeginDragHandler, IEndDragHandl
     {
         itemImage.raycastTarget = true;
         transform.SetParent(parentAfterDrag);
+        transform.localScale = Vector3.one;
 
         InventorySlot _slot = parentAfterDrag.GetComponent<InventorySlot>();
         if(_slot != null)
