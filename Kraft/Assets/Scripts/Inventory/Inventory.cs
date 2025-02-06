@@ -410,5 +410,28 @@ public class Inventory : MonoBehaviour, IContainer
         return null;
     }
 
+    #region Convert To
+
+    /// <summary> Converts the current inventory into an <see cref="ItemSlotContainer"/>, which can then be converted to a serializable format for saving. </summary>
+    /// <returns>A populated ItemSlotContainer representing the inventory contents.</returns>
+    public ItemSlotContainer ConvertToItemSlotContainer()
+    {
+        // Create a new container with a max slot count equal to the number of UI slots.
+        ItemSlotContainer container = new ItemSlotContainer(itemSlots.Count);
+        foreach (KeyValuePair<int, InventorySlot> kvp in itemSlots)
+        {
+            InventorySlot slot = kvp.Value;
+            if (slot.inventorySlotItem != null)
+            {
+                // Add the item data and its quantity to the container.
+                container.AddItem(slot.inventorySlotItem.itemData, slot.inventorySlotItem.stackSize);
+            }
+        }
+        return container;
+    }
+
+    #endregion
+
+
 }
 

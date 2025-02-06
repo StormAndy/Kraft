@@ -39,12 +39,12 @@ public class ItemCollection
 [System.Serializable]
 public class ItemStack
 {
-    public ItemData itemData;  // The item data associated with the stack
+    public string itemID;  // The item data associated with the stack
     public int quantity;       // The current quantity of the item in the stack
 
     public ItemStack(ItemData item, int quantity)
     {
-        this.itemData = item;
+        this.itemID = item.uniqueID;
         this.quantity = quantity;
     }
 }
