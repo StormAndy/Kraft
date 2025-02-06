@@ -20,6 +20,7 @@ public class Game : MonoBehaviour
     //Singletons
     public DatabaseManager databaseManager;
     public SkillManager skillManager;
+    public SaveManager saveManager;
     public OfflineProgressionSystem offlineProgressionSystem;
 
     //Gameplay prefabs to instiate on the fly
@@ -54,6 +55,9 @@ public class Game : MonoBehaviour
         databaseManager.LoadData();
         databaseManager.LogData();
         //databaseManager.SaveTestData();
+
+        if (saveManager == null)
+            saveManager = GetComponent<SaveManager>();
 
         //Skills
         if (skillManager == null)

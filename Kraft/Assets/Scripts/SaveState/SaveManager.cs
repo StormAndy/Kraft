@@ -7,20 +7,7 @@ using UnityEngine;
 /// </summary>
 public class SaveManager : MonoBehaviour
 {
-    public static SaveManager Instance { get; private set; }
-
-    private void Awake()
-    {
-        if (Instance == null)
-            Instance = this;
-        else
-            Destroy(gameObject);
-    }
-
-    /// <summary>
-    /// Creates a CharacterSave from the given Character instance.
-    /// </summary>
-    /// <param name="character">The Character to save.</param>
+    /// <summary> Creates a CharacterSave from the given Character instance. </summary>     <param name="character">The Character to save.</param>
     /// <returns>A CharacterSave containing character data, inventory, and skills.</returns>
     public CharacterSave CreateCharacterSave(Character character)
     {
