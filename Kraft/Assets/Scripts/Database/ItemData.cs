@@ -42,9 +42,9 @@ public class ItemStack
     public string itemID;  // The item data associated with the stack
     public int quantity;       // The current quantity of the item in the stack
 
-    public ItemStack(ItemData item, int quantity)
+    public ItemStack(string itemID, int quantity)
     {
-        this.itemID = item.uniqueID;
+        this.itemID = itemID;
         this.quantity = quantity;
     }
 }

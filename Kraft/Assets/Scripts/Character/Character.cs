@@ -3,10 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[Serializable]
+[System.Serializable]
 public class CharacterData
 {
     public string name;
+    public int id;
 }
 
 public class Character : MonoBehaviour
@@ -19,14 +20,15 @@ public class Character : MonoBehaviour
     [SerializeField] private Transform moveTargetGraphic;
 
     public bool isPlayerControlled;
-    
-
-    //Character Data
-    private CharacterData data = new CharacterData();
 
 
+    // Private character data; exposed via a public getter.
+    [SerializeField] private CharacterData data = new CharacterData();
+    public CharacterData Data => data; // Public accessor for CharacterData.
 
-   
+
+
+
     private void Update()
     {
         //Update move graphic Visibility
@@ -44,12 +46,24 @@ public class Character : MonoBehaviour
         mover.MoveTo(pos);
     }
 
-  
     private void Start()
     {
         if (mover == null)
             mover = GetComponent<Mover>();
-        //Game.Instance.AddCharacter(this);
+
+        // Set the unique ID using the prefab instance ID.
+        data.id = gameObject.GetInstanceID();
+
+        // Automatically add this character to the Game's lookup table.
+        if (Game.Instance != null)
+            Game.Instance.AddCharacter(this);
+    }
+
+    private void OnDestroy()
+    {
+        // Automatically remove this character when destroyed.
+        if (Game.Instance != null)
+            Game.Instance.RemoveCharacter(this);
     }
 
 }
