@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 /// <summary>
@@ -43,15 +44,40 @@ public class SaveManager : MonoBehaviour
         return save;
     }
 
+
+    /// <summary> Saves the given character’s data to a file in Assets/Saves/Characters. </summary>     <param name="character">The Character to save.</param>
+    /// <param name="fileName">The file name to save as (e.g., "Player1.json").</param>
+    public void SaveCharacter(Character character, string fileName)
+    {
+        CharacterSave save = CreateCharacterSave(character);
+        string jsonData = JsonUtility.ToJson(save, true);
+        SaveCharacterToAssetsFolder(fileName, jsonData);
+    }
+
+    /// <param name="fileName">The file name to load (e.g., "Player1.json").</param>
+    public void LoadCharacterSave(string fileName)
+    {
+        string jsonData = LoadCharacterFromAssetsFolder(fileName);
+        if (!string.IsNullOrEmpty(jsonData))
+        {
+            CharacterSave save = JsonUtility.FromJson<CharacterSave>(jsonData);
+
+            InstantiateCharacterSave(save);
+        }
+    }
+
     /// <summary> Instantiate a character using a CharacterSave. </summary>  <param name="save">The CharacterSave containing saved data.</param>
-    public void LoadCharacterSave(CharacterSave save)
+    public void InstantiateCharacterSave(CharacterSave save)
     {
         // TODO: Implement loading logic to update/create a Character from the save.
+        Debug.Log("Character save loaded");
+        Debug.Log("TODO: Implement loading logic on InstantiateCharacterSave() ");
     }
 
     /// <summary> Saving the game state, including world progress. </summary>
     public void SaveGame()
     {
+
         // TODO: Create and persist a GameSave that includes CharacterSaves and world state.
     }
 
@@ -60,4 +86,33 @@ public class SaveManager : MonoBehaviour
     {
         // TODO: Retrieve and apply GameSave data to restore game progress.
     }
+
+    /// <summary> Saves the provided JSON data to a file in Assets/Saves/Characters. </summary>      <param name="fileName">The file name to save as.</param>
+    /// <param name="jsonData">The JSON data to write.</param>
+    private void SaveCharacterToAssetsFolder(string fileName, string jsonData)
+    {
+        string folderPath = Path.Combine(Application.dataPath, "Saves", "Characters");
+        if (!Directory.Exists(folderPath))
+            Directory.CreateDirectory(folderPath);
+        string filePath = Path.Combine(folderPath, fileName);
+        File.WriteAllText(filePath, jsonData);
+        Debug.Log("Saved data to: " + filePath);
+    }
+
+    /// <summary> Loads JSON data from a file in Assets/Saves/Characters. </summary>    <param name="fileName">The file name to load.</param>
+    /// <returns>The JSON string if found; otherwise, null.</returns>
+    private string LoadCharacterFromAssetsFolder(string fileName)
+    {
+        string filePath = Path.Combine(Application.dataPath, "Saves", "Characters", fileName);
+        if (File.Exists(filePath))
+        {
+            string jsonData = File.ReadAllText(filePath);
+            Debug.Log("Loaded data from: " + filePath);
+            return jsonData;
+        }
+        Debug.LogWarning("File not found: " + filePath);
+        return null;
+    }
+
+
 }
