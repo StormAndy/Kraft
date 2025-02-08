@@ -1,0 +1,12 @@
+{
+    "characterData": {
+        "name": "TestCharacterB",
+        "id": 11,
+        "hashID": 1682380516
+    },
+    "inventoryData": {
+        "maxSlots": 0,
+        "slots": []
+    },
+    "skills": []
+}

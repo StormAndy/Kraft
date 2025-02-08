@@ -1228,6 +1228,8 @@ GameObject:
   - component: {fileID: 103103437}
   - component: {fileID: 103103436}
   - component: {fileID: 103103438}
+  - component: {fileID: 103103440}
+  - component: {fileID: 103103439}
   m_Layer: 0
   m_Name: GameInstance
   m_TagString: Untagged
@@ -1250,6 +1252,9 @@ MonoBehaviour:
   mainCamera: {fileID: 117043703}
   activeCharacter: {fileID: 6982812146753478163}
   databaseManager: {fileID: 103103438}
+  skillManager: {fileID: 0}
+  saveManager: {fileID: 0}
+  offlineProgressionSystem: {fileID: 0}
   prefabPickup: {fileID: 4064255384785167363, guid: c6a16cd29ec54a843a6aa8b386a47057, type: 3}
   state: 0
 --- !u!4 &103103437
@@ -1277,6 +1282,30 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 40c75efd34c40a94dab43bb0f16e4d37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &103103439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 103103435}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c6a85c8acc737b40800a96c1a45f3cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &103103440
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 103103435}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbea10c6eb59ed6489ab27c801e14483, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &103346973
@@ -12839,6 +12868,9 @@ MonoBehaviour:
   inititive: 0
   moveTargetGraphic: {fileID: 1026085799}
   isPlayerControlled: 0
+  data:
+    name: 
+    id: 0
 --- !u!1 &1230184056 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8345070699118464328, guid: 09aade0ecefd01e4b8f7661acf64f5c2, type: 3}
@@ -13637,6 +13669,9 @@ MonoBehaviour:
   inititive: 0
   moveTargetGraphic: {fileID: 463414615}
   isPlayerControlled: 0
+  data:
+    name: 
+    id: 0
 --- !u!114 &1314438597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22638,6 +22673,9 @@ MonoBehaviour:
   inititive: 0
   moveTargetGraphic: {fileID: 891726878}
   isPlayerControlled: 1
+  data:
+    name: 
+    id: 0
 --- !u!4 &6983258931469821652
 Transform:
   m_ObjectHideFlags: 0

@@ -1,14 +1,17 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-/// <summary>
-/// SaveManager is responsible for converting game state into serializable data,
-/// such as creating CharacterSave objects. In the future, it will also handle full GameSave data.
-/// </summary>
+/// <summary> SaveManager is responsible for converting game state into serializable data, 
+/// such as creating CharacterSave objects. In the future, it will also handle full GameSave data.</summary>
 public class SaveManager : MonoBehaviour
 {
-    /// <summary> Creates a CharacterSave from the given Character instance. </summary>     <param name="character">The Character to save.</param>
+    ///<summary> Number of backup files to keep</summary>
+    [SerializeField] private int backupCount = 10; 
+
+
+    /// <summary> Creates a CharacterSave from the given Character instance. </summary>     
     /// <returns>A CharacterSave containing character data, inventory, and skills.</returns>
     public CharacterSave CreateCharacterSave(Character character)
     {
@@ -45,28 +48,54 @@ public class SaveManager : MonoBehaviour
     }
 
 
-    /// <summary> Saves the given character’s data to a file in Assets/Saves/Characters. </summary>     <param name="character">The Character to save.</param>
-    /// <param name="fileName">The file name to save as (e.g., "Player1.json").</param>
-    public void SaveCharacter(Character character, string fileName)
+    /// <summary> Saves character’s data to a file in a unique subdirectory under Assets/Saves/Characters. 
+    /// Implements a backup system that shifts existing backups. </summary>
+    public void SaveCharacter(Character character)
     {
+        // Determine the unique folder for this character save using its name and hashID.
+        string saveFolder = GetSaveFolder(character);
+        // The uniqueID for naming files is the folder name (e.g., "ExampleName_123456789").
+        string uniqueID = Path.GetFileName(saveFolder);
+        string mainSaveFile = Path.Combine(saveFolder, uniqueID + ".charsave");
+
+        // Convert the character to save data.
         CharacterSave save = CreateCharacterSave(character);
         string jsonData = JsonUtility.ToJson(save, true);
-        SaveCharacterToAssetsFolder(fileName, jsonData);
+
+        // If a main save already exists, create backups by shifting the existing ones.
+        if (File.Exists(mainSaveFile))
+        {
+            ShiftBackups(saveFolder, uniqueID);
+            // Rename the current main save to backup _1.
+            string backupFile = Path.Combine(saveFolder, uniqueID + "_1.charbackup");
+            File.Move(mainSaveFile, backupFile);
+        }
+
+        // Write the new main save file.
+        File.WriteAllText(mainSaveFile, jsonData);
+        Debug.Log("Saved data to: " + mainSaveFile);
     }
 
-    /// <param name="fileName">The file name to load (e.g., "Player1.json").</param>
-    public void LoadCharacterSave(string fileName)
+    /// <summary> Loads a character’s data from a file in the character's unique save folder. </summary>
+    public void LoadCharacterSave(Character character, string fileName)
     {
-        string jsonData = LoadCharacterFromAssetsFolder(fileName);
-        if (!string.IsNullOrEmpty(jsonData))
+        string saveFolder = GetSaveFolder(character);
+        string filePath = Path.Combine(saveFolder, fileName);
+        if (File.Exists(filePath))
         {
+            string jsonData = File.ReadAllText(filePath);
+            Debug.Log("Loaded data from: " + filePath);
             CharacterSave save = JsonUtility.FromJson<CharacterSave>(jsonData);
-
             InstantiateCharacterSave(save);
+        }
+        else
+        {
+            Debug.LogWarning("File not found: " + filePath);
         }
     }
 
-    /// <summary> Instantiate a character using a CharacterSave. </summary>  <param name="save">The CharacterSave containing saved data.</param>
+    /// <summary> Instantiate a character using a CharacterSave. </summary>  
+    /// <param name="save">The CharacterSave containing saved data.</param>
     public void InstantiateCharacterSave(CharacterSave save)
     {
         // TODO: Implement loading logic to update/create a Character from the save.
@@ -87,8 +116,8 @@ public class SaveManager : MonoBehaviour
         // TODO: Retrieve and apply GameSave data to restore game progress.
     }
 
-    /// <summary> Saves the provided JSON data to a file in Assets/Saves/Characters. </summary>      <param name="fileName">The file name to save as.</param>
-    /// <param name="jsonData">The JSON data to write.</param>
+    /// <summary> Saves the provided JSON data to a file in Assets/Saves/Characters. </summary>      
+    /// <param name="fileName">The file name to save as.</param>    <param name="jsonData">The JSON data to write.</param>
     private void SaveCharacterToAssetsFolder(string fileName, string jsonData)
     {
         string folderPath = Path.Combine(Application.dataPath, "Saves", "Characters");
@@ -99,7 +128,7 @@ public class SaveManager : MonoBehaviour
         Debug.Log("Saved data to: " + filePath);
     }
 
-    /// <summary> Loads JSON data from a file in Assets/Saves/Characters. </summary>    <param name="fileName">The file name to load.</param>
+    /// <summary> Loads JSON data from a file in Assets/Saves/Characters. </summary>
     /// <returns>The JSON string if found; otherwise, null.</returns>
     private string LoadCharacterFromAssetsFolder(string fileName)
     {
@@ -114,5 +143,47 @@ public class SaveManager : MonoBehaviour
         return null;
     }
 
+
+    #region File Helper Methods
+
+    /// <summary> Determines and returns the save folder for a given character. The folder is based on the character's name and a hash 
+    /// from the time the folder was created. If a folder already exists for the character, it is reused. </summary>
+    /// <returns>The full path to the character's save folder.</returns>
+    private string GetSaveFolder(Character character)
+    {
+        string baseFolder = Path.Combine(Application.dataPath, "Saves", "Characters");
+        if (!Directory.Exists(baseFolder))
+            Directory.CreateDirectory(baseFolder);
+
+        // Use the character's name and hashID to create a unique folder name.
+        string folderName = character.Data.name + "_" + character.Data.hashID;
+        string folderPath = Path.Combine(baseFolder, folderName);
+
+        if (!Directory.Exists(folderPath))
+            Directory.CreateDirectory(folderPath);
+
+        return folderPath;
+    }
+
+    /// <summary> Shifts existing backup files in the specified folder. The highest-numbered backup is deleted then all backups are renamed </summary>
+    /// <param name="folder">The folder containing the save and backup files.</param>   <param name="uniqueID">The base unique identifier (folder name) for the save files.</param>
+    private void ShiftBackups(string folder, string uniqueID)
+    {
+        // Delete the highest-numbered backup if it exists.
+        string highestBackup = Path.Combine(folder, uniqueID + "_" + backupCount + ".charbackup");
+        if (File.Exists(highestBackup))
+            File.Delete(highestBackup);
+
+        // Shift backups from backupCount-1 down to 1.
+        for (int i = backupCount - 1; i >= 1; i--)
+        {
+            string currentBackup = Path.Combine(folder, uniqueID + "_" + i + ".charbackup");
+            string newBackup = Path.Combine(folder, uniqueID + "_" + (i + 1) + ".charbackup");
+            if (File.Exists(currentBackup))
+                File.Move(currentBackup, newBackup);
+        }
+    }
+
+    #endregion
 
 }
