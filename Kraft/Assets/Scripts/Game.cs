@@ -23,7 +23,7 @@ public class Game : MonoBehaviour
     public SaveManager saveManager;
     public OfflineProgressionSystem offlineProgressionSystem;
 
-    //Gameplay prefabs to instiate on the fly
+    // Gameplay prefabs to instiate on the fly
     public GameObject prefabPickup;
 
     //global states

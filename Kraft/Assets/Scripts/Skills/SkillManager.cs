@@ -7,7 +7,7 @@ public class SkillManager : MonoBehaviour
     // Dictionary mapping a character ID to their dictionary of skills.
     private Dictionary<int, Dictionary<string, Skill>> characterSkills = new Dictionary<int, Dictionary<string, Skill>>();
 
-    ///<summary>Adds a skill for the specified character.</summary> <param name="characterId">The ID of the character.</param>  <param name="skillId">The ID of the skill.</param>  <param name="skill">The Skill instance.</param>
+    ///<summary>Adds a skill for the specified character.</summary> 
     public void AddSkill(int characterId, string skillId, Skill skill)
     {
         if (!characterSkills.ContainsKey(characterId))
@@ -22,14 +22,14 @@ public class SkillManager : MonoBehaviour
             skill.GainExperience(amount);
     }
 
-    ///<summary>Retrieves a skill for the specified character.</summary>    <param name="characterId">The ID of the character.</param>  <param name="skillId">The ID of the skill.</param>
+    ///<summary>Retrieves a skill for the specified character.</summary>
     ///<returns>The Skill instance, or null if not found.</returns>
     public Skill GetSkill(int characterId, string skillId) =>
         characterSkills.TryGetValue(characterId, out var skills)
             ? (skills.TryGetValue(skillId, out var skill) ? skill : null)
             : null;
 
-    /// <summary>Retrieves all skills associated with the specified character.</summary>    <param name="characterId">The unique ID of the character.</param>
+    /// <summary>Retrieves all skills associated with the specified character.</summary>    
     /// <returns>A dictionary of skill IDs and Skill instances, or null if none exist.</returns>
     public Dictionary<string, Skill> GetSkillsForCharacter(int characterId) =>
         characterSkills.TryGetValue(characterId, out var skills) ? skills : null;
