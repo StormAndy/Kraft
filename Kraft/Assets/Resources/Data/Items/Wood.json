@@ -1,69 +1,6 @@
 {
     "items": [
         {
-            "name": "Strawberry",
-            "description": "A sweet red berry",
-            "isStackable": true,
-            "maxStackSize": 50,
-            "uniqueID": "berry_001",
-            "tags": [
-                "fruit",
-                "berry",
-                "red"
-            ],
-            "graphicIcon": {
-                "instanceID": 45306
-            },
-            "graphicPrefab": {
-                "instanceID": 0
-            },
-            "itemType": [
-                0
-            ]
-        },
-        {
-            "name": "Blueberry",
-            "description": "A small round blue berry",
-            "isStackable": true,
-            "maxStackSize": 50,
-            "uniqueID": "berry_002",
-            "tags": [
-                "fruit",
-                "berry",
-                "blue"
-            ],
-            "graphicIcon": {
-                "instanceID": 45306
-            },
-            "graphicPrefab": {
-                "instanceID": 0
-            },
-            "itemType": [
-                0
-            ]
-        },
-        {
-            "name": "Raspberry",
-            "description": "A tangy red berry",
-            "isStackable": true,
-            "maxStackSize": 50,
-            "uniqueID": "berry_003",
-            "tags": [
-                "fruit",
-                "berry",
-                "red"
-            ],
-            "graphicIcon": {
-                "instanceID": 45306
-            },
-            "graphicPrefab": {
-                "instanceID": 0
-            },
-            "itemType": [
-                0
-            ]
-        },
-        {
             "name": "Iron Sword",
             "description": "A sharp blade made of iron.",
             "isStackable": false,

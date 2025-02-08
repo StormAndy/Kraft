@@ -1,7 +1,7 @@
 {
-    "uniqueID": "recipe_wooden_sword",
-    "recipeName": "Wooden Sword",
-    "outputItemID": "wooden_sword",
+    "uniqueID": "recipe_wooden_axe",
+    "recipeName": "Wooden Axe",
+    "outputItemID": "wooden_axe",
     "outputQuantity": 1,
     "ingredients": [
         {

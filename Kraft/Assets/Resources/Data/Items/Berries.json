@@ -62,50 +62,6 @@
             "itemType": [
                 0
             ]
-        },
-        {
-            "name": "Iron Sword",
-            "description": "A sharp blade made of iron.",
-            "isStackable": false,
-            "maxStackSize": 1,
-            "uniqueID": "weapon_001",
-            "tags": [
-                "weapon",
-                "melee",
-                "iron"
-            ],
-            "graphicIcon": {
-                "instanceID": 45306
-            },
-            "graphicPrefab": {
-                "instanceID": 0
-            },
-            "itemType": [
-                0,
-                0
-            ]
-        },
-        {
-            "name": "Wooden Axe",
-            "description": "A basic axe made of wood.",
-            "isStackable": false,
-            "maxStackSize": 1,
-            "uniqueID": "tool_001",
-            "tags": [
-                "tool",
-                "axe",
-                "wood"
-            ],
-            "graphicIcon": {
-                "instanceID": 45306
-            },
-            "graphicPrefab": {
-                "instanceID": 0
-            },
-            "itemType": [
-                0,
-                0
-            ]
         }
     ]
 }
